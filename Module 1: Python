@@ -1,0 +1,86 @@
+import random
+
+
+class InvalidChoiceException(Exception):
+    """Raised when an invalid choice is made by the player."""
+
+
+def get_player_choice():
+    """
+    Get the player's choice for the round.
+    Return the choice in lowercase.
+    Raise InvalidChoiceException for an invalid choice.
+    """
+    choice = input("Please choose rock, paper, or scissors!").lower()
+    if choice not in ["rock", "paper", "scissors"]:
+        raise InvalidChoiceException
+    return choice
+
+
+def get_computer_choice():
+    """Randomly select and return the computer's choice for the round."""
+    return random.choice(["rock", "paper", "scissors"])
+
+
+def determine_winner(player, computer):
+    """
+    Determine the winner based on the player and computer choices.
+    Return 'player', 'computer', or 'tie'.
+    """
+    if player == computer:
+        return "tie"
+    elif (player == "rock" and computer == "scissors") or (player == "scissors" and computer == "paper") or (player == "paper" and computer == "rock"):
+        return "player"
+    else:
+        return "computer"
+
+
+def main():
+    player_score = 0
+    computer_score = 0
+    round_number = 1
+
+    print("Welcome to rock-paper-scissors! This game ends when a player reaches three wins!")
+    
+    while True:
+        print(f"Round {round_number}: ", end='')
+        
+        try:
+            player = get_player_choice()
+        except InvalidChoiceException:
+            print("Invalid command!")
+            continue
+        
+        computer = get_computer_choice()
+        
+        winner = determine_winner(player, computer)
+        
+        if winner == "player":
+            player_score += 1
+            print(f"The computer chose {computer}! You won this round! The current score is: Player - {player_score} Computer - {computer_score}.")
+        elif winner == "computer":
+            computer_score += 1
+            print(f"The computer chose {computer}! You lost this round! The current score is: Player - {player_score} Computer - {computer_score}.")
+        else:
+            print(f"The computer chose {computer}! This round is a tie! The current score is: Player - {player_score} Computer - {computer_score}.")
+
+        if player_score == 3:
+            print("You won! Would you like to play again? (Yes/No)")
+            play_again = input().lower()
+            if play_again == 'no':
+                break
+            else:
+                player_score, computer_score = 0, 0
+                round_number = 0
+        elif computer_score == 3:
+            print("You lost! Would you like to play again? (Yes/No)")
+            play_again = input().lower()
+            if play_again == 'no':
+                break
+            else:
+                player_score, computer_score = 0, 0
+                round_number = 0
+        
+        round_number += 1
+if __name__ == "__main__":
+         main()
